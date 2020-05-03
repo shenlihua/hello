@@ -16,7 +16,7 @@
 
 </head>
 <body>
-<div class="container" id="app">
+<div class="container-fuid p-3" id="app">
 	<div class="d-flex justify-content-center align-items-center mb-3 mx-auto" id="box" :style="{
 						width:this.width+'px',
 						height:this.height+'px',
@@ -124,15 +124,22 @@ var app = new Vue({
 			fontSize:24,
 			fontWeight:600,
 			radius:0,
-			my_timeout:''
+			lazy_fun:'',
+			updated_lazy_time:100,
 		},
-		
+		beforeUpdate:function(){
+			console.log(this.lazy_fun)
+			this.lazy_fun && clearTimeout(this.lazy_fun)
+		},
 		updated: function () {
-		  this.$nextTick(function () {
+		  // this.$nextTick(function () {
 		    // Code that will run only after the
 		    // entire view has been re-rendered
-		    this.generateCapture()
-		  })
+		    	var that = this
+			    this.lazy_fun = setTimeout(function(){
+			    	that.generateCapture()
+			    },this.updated_lazy_time )
+		  // })
 		},
 		created(){
 			
@@ -142,6 +149,7 @@ var app = new Vue({
 		},
 		methods:{
 			generateCapture(){
+				console.log('generateCapture')
 				document.querySelector("#capture").innerHTML=""
 				html2canvas(document.querySelector("#box")).then(canvas => {
 				    document.querySelector("#capture").appendChild(canvas)
