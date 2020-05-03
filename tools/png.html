@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>自作图片</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/bootstrap-colorpicker/3.2.0/css/bootstrap-colorpicker.min.css">
+	<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.slim.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"></script>
+	<!-- 生产环境版本，优化了尺寸和速度 -->
+	<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+	<script src="https://cdn.bootcdn.net/ajax/libs/html2canvas/0.5.0-beta4/html2canvas.min.js"></script>
+	<script src="https://cdn.bootcdn.net/ajax/libs/bootstrap-colorpicker/3.2.0/js/bootstrap-colorpicker.js"></script>
+
+
+</head>
+<body>
+<div class="container" id="app">
+	<div class="d-flex justify-content-center align-items-center mb-3 mx-auto" id="box" :style="{
+						width:this.width+'px',
+						height:this.height+'px',
+						background:this.bgColor,
+						color:this.fontColor,
+						fontSize:this.fontSize+'px',
+						fontWeight:this.fontWeight,
+						borderRadius: this.radius+'px',
+					}">
+		{{content}}
+	</div>
+	 <div class="row  mb-3">
+	    <div class="col-3">
+		    <div class="input-group">
+			  <div class="input-group-prepend">
+			    <span class="input-group-text">内容</span>
+			  </div>
+			  <input type="text" class="form-control" v-model="content" >
+			</div>
+	    </div>
+	    <div class="col-3">
+		    <div class="input-group">
+			  <div class="input-group-prepend">
+			    <span class="input-group-text">宽度(px)</span>
+			  </div>
+			  <input type="number" class="form-control" v-model="width" >
+			</div>
+	    </div>
+	    <div class="col-3">
+	        <div class="input-group">
+		  	  <div class="input-group-prepend">
+			    <span class="input-group-text">高度(px)</span>
+			  </div>
+			  <input type="number" class="form-control" v-model="height" >
+			</div>
+	    </div>
+	    <div class="col-3">
+	    	<div class="input-group">
+		  	    <div class="input-group-prepend">
+			      <span class="input-group-text">背景色</span>
+			    </div>
+				<input class="form-control color-switch" type="text" data-app_field="bgColor"  v-model="bgColor" />
+			</div>
+	    </div>
+
+	    <!-- <div class="col-2">
+	    	<div class="input-group-prepend">
+			    <button class="btn "  :class="[is_radius?'btn-primary':'btn-secondary']" type="button">圆角</button>
+			    <button class="btn"  :class="[is_bold?'btn-primary':'btn-secondary']" type="button">加粗</button>
+		    </div>
+	    </div> -->
+	  </div>
+	 <div class="row  mb-3">
+	    <div class="col-3">
+		    <div class="input-group">
+			  <div class="input-group-prepend">
+			    <span class="input-group-text">font-size</span>
+			  </div>
+			  <input type="number" class="form-control" v-model="fontSize" >
+			</div>
+	    </div>
+	    <div class="col-3">
+		    <div class="input-group">
+			  <div class="input-group-prepend">
+			    <span class="input-group-text">font-weight</span>
+			  </div>
+			  <input type="number" class="form-control" v-model="fontWeight" >
+			</div>
+	    </div>
+	    <div class="col-3">
+	        <div class="input-group">
+		  	  <div class="input-group-prepend">
+			    <span class="input-group-text">圆角</span>
+			  </div>
+			  <input type="number" class="form-control" v-model="radius" >
+			</div>
+	    </div>
+
+	    <div class="col-3">
+	    	<div class="input-group">
+		  	    <div class="input-group-prepend">
+			      <span class="input-group-text">字体色</span>
+			    </div>
+				<input class="form-control color-switch" type="text" data-app_field="fontColor" v-model="fontColor" />
+			</div>
+	    </div>
+	    
+	  </div>
+
+	<div id="capture">
+	    
+	</div>
+</div>
+</body>
+</html>
+<script type="text/javascript">
+var app = new Vue({
+		el: '#app',
+		data: {
+			content:'内容',
+			width:200,
+			height:200,
+			bgColor:"#ff0000",
+			fontColor:"#ffffff",
+			fontSize:24,
+			fontWeight:600,
+			radius:0,
+			my_timeout:''
+		},
+		
+		updated: function () {
+		  this.$nextTick(function () {
+		    // Code that will run only after the
+		    // entire view has been re-rendered
+		    this.generateCapture()
+		  })
+		},
+		created(){
+			
+		},
+		mounted(){
+			this.generateCapture()
+		},
+		methods:{
+			generateCapture(){
+				document.querySelector("#capture").innerHTML=""
+				html2canvas(document.querySelector("#box")).then(canvas => {
+				    document.querySelector("#capture").appendChild(canvas)
+				});
+			}
+		}
+
+})
+
+ // Basic instantiation:
+      $('.color-switch').colorpicker();
+      
+      // Example using an event, to change the color of the #demo div background:
+      $('.color-switch').on('colorpickerChange', function(event) {
+        	var app_field = $(this).data('app_field')
+        	app[app_field] = event.color.toString()
+      });
+
+</script>
