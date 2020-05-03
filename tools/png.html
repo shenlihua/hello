@@ -107,7 +107,7 @@
 	  </div>
 	  <div class="row mb-3">
 	  	  <div class="col-3">
-	  	  	<a id="down" href="" class="btn btn-primary">下载图片</a>
+	  	  	<a id="down" href="" class="btn btn-primary">下载</a>
 	  	  </div>
 	  </div>
 
@@ -165,11 +165,16 @@ var app = new Vue({
 			},
 			exportCanvasAsPNG(canvas, fileName) {
 
+
 			    var MIME_TYPE = "image/png";
+
+			    var imgURL = canvas.toDataURL(MIME_TYPE);
+
 			    var dlLink = document.querySelector('#down');
 			    dlLink.download = fileName;
 			    dlLink.href = imgURL;
 			    dlLink.dataset.downloadurl = [MIME_TYPE, dlLink.download, dlLink.href].join(':');
+
 			}
 
 		}
