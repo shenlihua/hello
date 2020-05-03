@@ -105,10 +105,16 @@
 	    </div>
 	    
 	  </div>
+	  <div class="row mb-3">
+	  	  <div class="col-3">
+	  	  	<a id="down" href="" class="btn btn-primary">下载图片</a>
+	  	  </div>
+	  </div>
 
 	<div id="capture">
 	    
 	</div>
+
 </div>
 </body>
 </html>
@@ -127,8 +133,8 @@ var app = new Vue({
 			lazy_fun:'',
 			updated_lazy_time:100,
 		},
-		beforeUpdate:function(){
-			console.log(this.lazy_fun)
+		beforeUpdate:function(options){
+			console.log(this.lazy_fun,options)
 			this.lazy_fun && clearTimeout(this.lazy_fun)
 		},
 		updated: function () {
@@ -149,12 +155,23 @@ var app = new Vue({
 		},
 		methods:{
 			generateCapture(){
-				console.log('generateCapture')
 				document.querySelector("#capture").innerHTML=""
 				html2canvas(document.querySelector("#box")).then(canvas => {
+        			console.log('event',canvas)
+
 				    document.querySelector("#capture").appendChild(canvas)
+				    this.exportCanvasAsPNG(canvas,'abc')
 				});
+			},
+			exportCanvasAsPNG(canvas, fileName) {
+
+			    var MIME_TYPE = "image/png";
+			    var dlLink = document.querySelector('#down');
+			    dlLink.download = fileName;
+			    dlLink.href = imgURL;
+			    dlLink.dataset.downloadurl = [MIME_TYPE, dlLink.download, dlLink.href].join(':');
 			}
+
 		}
 
 })
@@ -166,6 +183,7 @@ var app = new Vue({
       $('.color-switch').on('colorpickerChange', function(event) {
         	var app_field = $(this).data('app_field')
         	app[app_field] = event.color.toString()
+
       });
 
 </script>
